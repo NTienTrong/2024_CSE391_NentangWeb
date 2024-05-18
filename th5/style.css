@@ -15,6 +15,10 @@ html {
   background-color: #dee1e4 !important;
 }
 
+.form-control {
+  width: 200px !important;
+}
+
 /* main */
 .table-responsive {
   margin: 30px 0;
