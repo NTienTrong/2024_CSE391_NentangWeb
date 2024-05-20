@@ -1,0 +1,56 @@
+body .container{
+    justify-content: space-between;
+}
+.d1  img{
+    width: 350px;
+    height: 225px;
+}
+.d2 img{
+    width: 350px;
+    height: 225px;
+}
+.d3 img{
+    width: 350px;
+    height: 225px;
+}
+.d4 img{
+    width: 350px;
+    height: 225px;
+}
+.d5 img{
+    width: 350px;
+    height: 225px;
+}
+.d6 img{
+    width: 350px;
+    height: 225px;
+}
+.d1 ul{
+    text-decoration:none;
+    list-style: none;
+}
+.d2 ul{
+    text-decoration: none;
+    list-style: none;
+}
+.d3 ul{
+    text-decoration: none;
+    list-style: none;
+}
+.d4 ul{
+    text-decoration:none;
+    list-style: none;
+}
+.d5 ul{
+    text-decoration:none;
+    list-style: none;
+}
+.d6 ul{
+    text-decoration:none;
+    list-style: none;
+}
+body section .container{
+    display: flex;
+    padding: 0;
+    
+}
