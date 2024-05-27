@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Ứng dụng quản lý sinh viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Thêm sinh viên</h2>
+    <form id="formSinhVien" class="mb-8">
+      <div class="mb-4">
+        <label for="hoTen" class="block text-gray-700 text-sm font-bold mb-2"
+          >Họ tên:</label
+        >
+        <input
+          type="text"
+          id="hoTen"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="maSV" class="block text-gray-700 text-sm font-bold mb-2"
+          >Mã SV:</label
+        >
+        <input
+          type="text"
+          id="maSV"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="ngaySinh" class="block text-gray-700 text-sm font-bold mb-2"
+          >Ngày sinh:</label
+        >
+        <input
+          type="date"
+          id="ngaySinh"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="lop" class="block text-gray-700 text-sm font-bold mb-2"
+          >Lớp:</label
+        >
+        <input
+          type="text"
+          id="lop"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <input type="hidden" id="studentIndex" />
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          id="submitButton"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Thêm
+        </button>
+      </div>
+    </form>
+
+    <h2 class="text-2xl font-bold mb-4">Danh sách sinh viên</h2>
+    <table id="bangSinhVien" class="table-auto w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border px-4 py-2">Họ tên</th>
+          <th class="border px-4 py-2">Mã SV</th>
+          <th class="border px-4 py-2">Ngày sinh</th>
+          <th class="border px-4 py-2">Lớp</th>
+          <th class="border px-4 py-2">Hành động</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      document
+        .getElementById("formSinhVien")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Lấy dữ liệu từ form
+          const hoTen = document.getElementById("hoTen").value;
+          const maSV = document.getElementById("maSV").value;
+          const ngaySinh = document.getElementById("ngaySinh").value;
+          const lop = document.getElementById("lop").value;
+          const studentIndex = document.getElementById("studentIndex").value;
+
+          // Validate dữ liệu
+          if (!hoTen || !maSV || !ngaySinh || !lop) {
+            alert("Vui lòng điền đầy đủ thông tin.");
+            return;
+          }
+
+          // Lấy danh sách sinh viên từ localStorage
+          let danhSachSinhVien =
+            JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+
+          if (studentIndex === "") {
+            // Thêm sinh viên mới
+            danhSachSinhVien.push({ hoTen, maSV, ngaySinh, lop });
+          } else {
+            // Cập nhật thông tin sinh viên
+            danhSachSinhVien[studentIndex] = { hoTen, maSV, ngaySinh, lop };
+          }
+
+          // Lưu lại vào localStorage
+          localStorage.setItem(
+            "danhSachSinhVien",
+            JSON.stringify(danhSachSinhVien)
+          );
+
+          // Hiển thị lại danh sách sinh viên
+          hienThiDanhSachSinhVien();
+
+          // Xóa form và đặt lại nút submit
+          document.getElementById("formSinhVien").reset();
+          document.getElementById("submitButton").textContent = "Thêm";
+          document.getElementById("studentIndex").value = "";
+        });
+
+      // Hàm hiển thị danh sách sinh viên từ localStorage khi trang tải
+      function hienThiDanhSachSinhVien() {
+        const bangSinhVien = document
+          .getElementById("bangSinhVien")
+          .getElementsByTagName("tbody")[0];
+        bangSinhVien.innerHTML = ""; // Xóa nội dung bảng
+
+        let danhSachSinhVien =
+          JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+        danhSachSinhVien.forEach((sinhVien, index) => {
+          const row = bangSinhVien.insertRow();
+
+          const cellHoTen = row.insertCell(0);
+          const cellMaSV = row.insertCell(1);
+          const cellNgaySinh = row.insertCell(2);
+          const cellLop = row.insertCell(3);
+          const cellHanhDong = row.insertCell(4);
+
+          cellHoTen.className = "border px-4 py-2";
+          cellMaSV.className = "border px-4 py-2";
+          cellNgaySinh.className = "border px-4 py-2";
+          cellLop.className = "border px-4 py-2";
+          cellHanhDong.className = "border px-4 py-2 text-center";
+
+          cellHoTen.innerText = sinhVien.hoTen;
+          cellMaSV.innerText = sinhVien.maSV;
+          cellNgaySinh.innerText = sinhVien.ngaySinh;
+          cellLop.innerText = sinhVien.lop;
+          cellHanhDong.innerHTML = `
+            <button onclick="editStudent(${index})" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">Sửa</button>
+            <button onclick="xoaSinhVien(${index})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">Xóa</button>
+          `;
+        });
+      }
+
+      // Hàm sửa sinh viên
+      function editStudent(index) {
+        let danhSachSinhVien =
+          JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+        const sinhVien = danhSachSinhVien[index];
+
+        document.getElementById("hoTen").value = sinhVien.hoTen;
+        document.getElementById("maSV").value = sinhVien.maSV;
+        document.getElementById("ngaySinh").value = sinhVien.ngaySinh;
+        document.getElementById("lop").value = sinhVien.lop;
+        document.getElementById("studentIndex").value = index;
+
+        document.getElementById("submitButton").textContent = "Cập nhật";
+      }
+
+      // Hàm xóa sinh viên
+      function xoaSinhVien(index) {
+        let danhSachSinhVien =
+          JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+        danhSachSinhVien.splice(index, 1);
+        localStorage.setItem(
+          "danhSachSinhVien",
+          JSON.stringify(danhSachSinhVien)
+        );
+
+        // Hiển thị lại danh sách sinh viên
+        hienThiDanhSachSinhVien();
+      }
+
+      // Gọi hàm hiển thị danh sách khi trang tải
+      hienThiDanhSachSinhVien();
+    </script>
+  </body>
+</html>
